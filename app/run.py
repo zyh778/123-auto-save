@@ -177,8 +177,12 @@ def get_data():
     if "push_config" in data:
         del data["push_config"]
 
+    # 屏蔽插件配置
+    if "plugins" in data:
+        del data["plugins"]
+
     data["api_token"] = get_login_token()
-    data["task_plugins_config_default"] = task_plugins_config_default
+    # data["task_plugins_config_default"] = task_plugins_config_default  # 插件功能已屏蔽
     return jsonify({"success": True, "data": data})
 
 
@@ -189,15 +193,17 @@ def update():
     if not is_login():
         return jsonify({"success": False, "message": "未登录"})
 
-    # 过滤掉通知相关的配置项
-    dont_save_keys = ["task_plugins_config_default", "api_token", "push_config"]
+    # 过滤掉通知和插件相关的配置项
+    dont_save_keys = ["task_plugins_config_default", "api_token", "push_config", "plugins"]
     for key, value in request.json.items():
         if key not in dont_save_keys:
             config_data.update({key: value})
 
-    # 确保通知配置被清空或移除
+    # 确保通知和插件配置被清空或移除
     if "push_config" in config_data:
         del config_data["push_config"]
+    if "plugins" in config_data:
+        del config_data["plugins"]
 
     Config.write_json(CONFIG_PATH, config_data)
     # 重新加载任务
@@ -476,8 +482,9 @@ def add_task():
                 ),
                 400,
             )
-    if not request_data.get("addition"):
-        request_data["addition"] = task_plugins_config_default
+    # 插件功能已屏蔽，不再设置默认插件配置
+    # if not request_data.get("addition"):
+    #     request_data["addition"] = task_plugins_config_default
     # 添加任务
     config_data["tasklist"].append(request_data)
     Config.write_json(CONFIG_PATH, config_data)
@@ -594,10 +601,10 @@ def init():
     if not config_data.get("crontab"):
         config_data["crontab"] = "0 8,18,20 * * *"
 
-    # 初始化插件配置
-    _, plugins_config_default, task_plugins_config_default = Config.load_plugins()
-    plugins_config_default.update(config_data.get("plugins", {}))
-    config_data["plugins"] = plugins_config_default
+    # 插件功能已屏蔽
+    # _, plugins_config_default, task_plugins_config_default = Config.load_plugins()
+    # plugins_config_default.update(config_data.get("plugins", {}))
+    # config_data["plugins"] = plugins_config_default
 
     # 更新配置
     Config.write_json(CONFIG_PATH, config_data)

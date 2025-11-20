@@ -52,16 +52,7 @@
               </a>
             </li>
           </ul>
-          <div class="nav-bottom text-center">
-            <p class="position-relative" hidden>
-              <b class="text-success"><i class="bi bi-record-circle mr-1"></i>视频教程</b>
-              <span class="position-absolute qrcode-tutorial">
-                使用夸克扫码查看<br>
-                <img src="./static/img/qrcode_tutorial.png">
-              </span>
-            </p>
-            </div>
-        </div>
+          </div>
       </nav>
 
       <main class="col-md-9 col-lg-10 ml-sm-auto">
@@ -76,10 +67,9 @@
                 <button type="button" class="btn btn-outline-primary" @click="addCookie()">+</button>
               </div>
             </div>
-            <p>1. 所有账号执行签到，纯签到只需移动端参数即可！</p>
-            <p>2. 仅第一个账号执行转存，请自行确认顺序。<b>最好是手机验证码<a target="_blank" href="https://pan.quark.cn/">登录</a>，CK比较完整！</b>如需签到参数附在CK后面。</p>
+            <p>仅第一个账号执行转存，请自行确认顺序</p>
             <div v-for="(value, index) in formData.cookie" :key="index" class="input-group mb-2">
-              <input type="text" v-model="formData.cookie[index]" class="form-control" placeholder="打开 pan.quark.com 按 F12 抓取">
+              <input type="text" v-model="formData.cookie[index]" class="form-control" placeholder="填写cookie">
               <div class="input-group-append">
                 <button type="button" class="btn btn-outline-danger" @click="removeCookie(index)">-</button>
               </div>
@@ -101,29 +91,7 @@
             </div>
 
   
-            <div class="row title" v-if="Object.keys(getAvailablePlugins(formData.plugins)).length" title="各插件的配置选项，具体键值由插件定义，见Wiki">
-              <div class="col">
-                <h2 style="display: inline-block;"><i class="bi bi-plug"></i> 插件</h2>
-                </div>
-            </div>
-            <div v-for="(plugin, pluginName) in getAvailablePlugins(formData.plugins)" :key="pluginName">
-              <div class="form-group row mb-0" style="display:flex; align-items:center;">
-                <div data-toggle="collapse" :data-target="'#collapse_'+pluginName" aria-expanded="true" :aria-controls="'collapse_'+pluginName">
-                  <div class="btn btn-block text-left">
-                    <i class="bi bi-caret-right-fill"></i> <span v-html="`${pluginName}`"></span>
-                  </div>
-                </div>
-              </div>
-              <div class="collapse ml-3" :id="'collapse_'+pluginName">
-                <div v-for="(value, key) in plugin" :key="key" class="form-group row">
-                  <label class="col-sm-2 col-form-label" v-html="key"></label>
-                  <div class="col-sm-10">
-                    <input type="text" v-model="formData.plugins[pluginName][key]" class="form-control">
-                  </div>
-                </div>
-              </div>
-            </div>
-
+          
             <div class="row title" title="预定义的正则匹配规则，在任务列表中可直接点击使用">
               <div class="col-10">
                 <h2 style="display: inline-block;"><i class="bi bi-magic"></i> 魔法匹配</h2>
@@ -398,13 +366,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="form-group row" v-if="Object.keys(getAvailablePlugins(formData.plugins)).length" title="单个任务的插件选项，具体键值由插件定义，见Wiki">
-                    <label class="col-sm-2 col-form-label">插件选项</label>
-                    <div class="col-sm-10">
-                      <v-jsoneditor v-model="task.addition" :options="{mode:'tree'}" :plus="false" height="180px"></v-jsoneditor>
-                    </div>
-                  </div>
-                </div>
+                                  </div>
               </template>
             </div>
             <div class="row mt-5">
@@ -563,8 +525,7 @@
       el: '#app',
       data: {
         version: "[[ version ]]",
-              plugin_flags: "[[ plugin_flags ]]",
-        weekdays: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                      weekdays: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
         formData: {
           cookie: [],
             media_servers: {},
@@ -690,7 +651,8 @@
                 if (!this.taskDirs.includes(parentDir))
                   this.taskDirs.push(parentDir);
               });
-              this.newTask.addition = config_data.task_plugins_config_default;
+              // 插件功能已屏蔽，不再设置默认插件配置
+            // this.newTask.addition = config_data.task_plugins_config_default;
               // 确保source配置存在
               if (!config_data.source) {
                 config_data.source = {};
@@ -936,17 +898,7 @@
             behavior: "smooth"
           });
         },
-        getAvailablePlugins(plugins) {
-          availablePlugins = {};
-          const pluginsFlagsArray = this.plugin_flags.split(',');
-          for (const pluginName in plugins) {
-            if (!pluginsFlagsArray.includes(`-${pluginName}`)) {
-              availablePlugins[pluginName] = plugins[pluginName];
-            }
-          }
-          return availablePlugins;
-        },
-        toggleAllWeekdays(task) {
+                toggleAllWeekdays(task) {
           if (task.runweek.length === 7) {
             task.runweek = [];
           } else {

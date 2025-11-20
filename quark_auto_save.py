@@ -1030,7 +1030,7 @@ def verify_account(account):
     # 验证账号
     print(f"▶️ 验证第{account.index}个账号")
     if "__uid" not in account.cookie:
-        print(f"💡 不存在cookie必要参数，判断为仅签到")
+        print(f"💡 不存在cookie必要参数，判断为仅签到（功能已屏蔽）")
         return False
     else:
         account_info = account.init()
@@ -1052,44 +1052,19 @@ def format_bytes(size_bytes: int) -> str:
 
 
 def do_sign(account):
-    if not account.mparam:
-        print("⏭️ 移动端参数未设置，跳过签到")
-        print()
-        return
-    # 每日领空间
-    growth_info = account.get_growth_info()
-    if growth_info:
-        growth_message = f"💾 {'88VIP' if growth_info['88VIP'] else '普通用户'} 总空间：{format_bytes(growth_info['total_capacity'])}，签到累计获得：{format_bytes(growth_info['cap_composition'].get('sign_reward', 0))}"
-        if growth_info["cap_sign"]["sign_daily"]:
-            sign_message = f"📅 签到记录: 今日已签到+{int(growth_info['cap_sign']['sign_daily_reward']/1024/1024)}MB，连签进度({growth_info['cap_sign']['sign_progress']}/{growth_info['cap_sign']['sign_target']})✅"
-            message = f"{sign_message}\n{growth_message}"
-            print(message)
-        else:
-            sign, sign_return = account.get_growth_sign()
-            if sign:
-                sign_message = f"📅 执行签到: 今日签到+{int(sign_return/1024/1024)}MB，连签进度({growth_info['cap_sign']['sign_progress']+1}/{growth_info['cap_sign']['sign_target']})✅"
-                message = f"{sign_message}\n{growth_message}"
-                if (
-                    str(
-                        CONFIG_DATA.get("push_config", {}).get("QUARK_SIGN_NOTIFY")
-                    ).lower()
-                    == "false"
-                    or os.environ.get("QUARK_SIGN_NOTIFY") == "false"
-                ):
-                    print(message)
-                else:
-                    message = message.replace("今日", f"[{account.nickname}]今日")
-                    print(f"[通知已屏蔽] {message}")
-            else:
-                print(f"📅 签到异常: {sign_return}")
+    # 签到功能已屏蔽
+    print("⏭️ 签到功能已屏蔽，跳过签到")
     print()
 
 
 def do_save(account, tasklist=[]):
-    print(f"🧩 载入插件")
-    plugins, CONFIG_DATA["plugins"], task_plugins_config = Config.load_plugins(
-        CONFIG_DATA.get("plugins", {})
-    )
+    # 插件功能已屏蔽
+    print(f"🧩 插件功能已屏蔽")
+    # plugins, CONFIG_DATA["plugins"], task_plugins_config = Config.load_plugins(
+    #     CONFIG_DATA.get("plugins", {})
+    # )
+    plugins = {}
+    task_plugins_config = {}
     print(f"转存账号: {account.nickname}")
     # 获取全部保存目录fid
     account.update_savepath_fid(tasklist)
@@ -1145,17 +1120,18 @@ def do_save(account, tasklist=[]):
                         result[key] = value
                 return result
 
-            task["addition"] = merge_dicts(
-                task.get("addition", {}), task_plugins_config
-            )
-            # 调用插件
-            if is_new_tree:
-                print(f"🧩 调用插件")
-                for plugin_name, plugin in plugins.items():
-                    if plugin.is_active:
-                        task = (
-                            plugin.run(task, account=account, tree=is_new_tree) or task
-                        )
+            # 插件功能已屏蔽，不再合并插件配置
+            # task["addition"] = merge_dicts(
+            #     task.get("addition", {}), task_plugins_config
+            # )
+            # 插件功能已屏蔽，不再调用插件
+            # if is_new_tree:
+            #     print(f"🧩 调用插件")
+            #     for plugin_name, plugin in plugins.items():
+            #         if plugin.is_active:
+            #             task = (
+            #                 plugin.run(task, account=account, tree=is_new_tree) or task
+            #             )
     print()
 
 
@@ -1194,7 +1170,7 @@ def main():
     if not os.path.exists(config_path):
         if os.environ.get("QUARK_COOKIE"):
             print(
-                f"⚙️ 读取到 QUARK_COOKIE 环境变量，仅签到领空间。如需执行转存，请删除该环境变量后配置 {config_path} 文件"
+                f"⚙️ 读取到 QUARK_COOKIE 环境变量，仅签到领空间（签到功能已屏蔽）。如需执行转存，请删除该环境变量后配置 {config_path} 文件"
             )
             cookie_val = os.environ.get("QUARK_COOKIE")
             cookie_form_file = False
@@ -1216,14 +1192,14 @@ def main():
         print("❌ cookie 未配置")
         return
     accounts = [Quark(cookie, index) for index, cookie in enumerate(cookies)]
-    # 签到
-    print(f"===============签到任务===============")
-    if tasklist_from_env:
-        verify_account(accounts[0])
-    else:
-        for account in accounts:
-            verify_account(account)
-            do_sign(account)
+    # 签到功能已屏蔽
+    print(f"===============签到任务已屏蔽===============")
+    # if tasklist_from_env:
+    #     verify_account(accounts[0])
+    # else:
+    #     for account in accounts:
+    #         verify_account(account)
+    #         do_sign(account)
     print()
     # 转存
     if accounts[0].is_active and cookie_form_file:
