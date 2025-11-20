@@ -33,17 +33,6 @@ parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, parent_dir)
 from quark_auto_save import Quark, Config, MagicRename
 
-print(
-    r"""
-   ____    ___   _____
-  / __ \  /   | / ___/
- / / / / / /| | \__ \
-/ /_/ / / ___ |___/ /
-\___\_\/_/  |_/____/
-
--- Quark-Auto-Save --
- """
-)
 sys.stdout.flush()
 
 
@@ -124,11 +113,16 @@ def is_login():
 # 设置icon
 @app.route("/favicon.ico")
 def favicon():
-    return send_from_directory(
+    response = send_from_directory(
         os.path.join(app.root_path, "static"),
-        "favicon.ico",
+        "favicon2.ico",
         mimetype="image/vnd.microsoft.icon",
     )
+    # 强制浏览器不缓存favicon
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+    return response
 
 
 # 登录页面
@@ -178,6 +172,11 @@ def get_data():
         return jsonify({"success": False, "message": "未登录"})
     data = Config.read_json(CONFIG_PATH)
     del data["webui"]
+
+    # 屏蔽通知配置
+    if "push_config" in data:
+        del data["push_config"]
+
     data["api_token"] = get_login_token()
     data["task_plugins_config_default"] = task_plugins_config_default
     return jsonify({"success": True, "data": data})
@@ -189,14 +188,21 @@ def update():
     global config_data
     if not is_login():
         return jsonify({"success": False, "message": "未登录"})
-    dont_save_keys = ["task_plugins_config_default", "api_token"]
+
+    # 过滤掉通知相关的配置项
+    dont_save_keys = ["task_plugins_config_default", "api_token", "push_config"]
     for key, value in request.json.items():
         if key not in dont_save_keys:
             config_data.update({key: value})
+
+    # 确保通知配置被清空或移除
+    if "push_config" in config_data:
+        del config_data["push_config"]
+
     Config.write_json(CONFIG_PATH, config_data)
     # 重新加载任务
     if reload_tasks():
-        logging.info(f">>> 配置更新成功")
+        logging.info(f">>> 配置更新成功 (通知功能已屏蔽)")
         return jsonify({"success": True, "message": "配置更新成功"})
     else:
         logging.info(f">>> 配置更新失败")
@@ -222,9 +228,6 @@ def run_script_now():
             process_env["QUARK_TEST"] = "true"
             process_env["COOKIE"] = json.dumps(
                 request.json.get("cookie", []), ensure_ascii=False
-            )
-            process_env["PUSH_CONFIG"] = json.dumps(
-                request.json.get("push_config", {}), ensure_ascii=False
             )
         if tasklist:
             process_env["TASKLIST"] = json.dumps(tasklist, ensure_ascii=False)
@@ -574,6 +577,10 @@ def init():
     Config.breaking_change_update(config_data)
     if not config_data.get("magic_regex"):
         config_data["magic_regex"] = MagicRename().magic_regex
+
+    # 移除通知配置（如果存在）
+    if "push_config" in config_data:
+        del config_data["push_config"]
 
     # 默认管理账号
     config_data["webui"] = {

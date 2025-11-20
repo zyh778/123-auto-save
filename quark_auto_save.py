@@ -36,26 +36,12 @@ GH_PROXY = os.environ.get("GH_PROXY", "https://ghproxy.net/")
 
 # 发送通知消息
 def send_ql_notify(title, body):
-    try:
-        # 导入通知模块
-        import notify
-
-        # 如未配置 push_config 则使用青龙环境通知设置
-        if CONFIG_DATA.get("push_config"):
-            notify.push_config.update(CONFIG_DATA["push_config"])
-            notify.push_config["CONSOLE"] = notify.push_config.get("CONSOLE", True)
-        notify.send(title, body)
-    except Exception as e:
-        if e:
-            print("发送通知消息失败！")
+    print(f"[通知已屏蔽] {title}: {body}")
 
 
 # 添加消息
 def add_notify(text):
-    global NOTIFYS
-    NOTIFYS.append(text)
-    print("📢", text)
-    return text
+    print(f"[通知已屏蔽] {text}")
 
 
 class Config:
@@ -812,7 +798,7 @@ class Quark:
             return
         else:
             message = get_stoken.get("message")
-            add_notify(f"❌《{task['taskname']}》：{message}\n")
+            print(f"❌《{task['taskname']}》：{message}")
             task["shareurl_ban"] = message
             return
         # print("stoken: ", stoken)
@@ -821,7 +807,7 @@ class Quark:
         if updated_tree.size(1) > 0:
             self.do_rename(updated_tree)
             print()
-            add_notify(f"✅《{task['taskname']}》添加追更：\n{updated_tree}")
+            print(f"✅《{task['taskname']}》添加追更")
             return updated_tree
         else:
             print(f"任务结束：没有新的转存任务")
@@ -836,7 +822,7 @@ class Quark:
         if not share_file_list:
             if subdir_path == "":
                 task["shareurl_ban"] = "分享为空，文件已被分享者删除"
-                add_notify(f"❌《{task['taskname']}》：{task['shareurl_ban']}\n")
+                print(f"❌《{task['taskname']}》：{task['shareurl_ban']}")
             return tree
         elif (
             len(share_file_list) == 1
@@ -993,7 +979,7 @@ class Quark:
                 else:
                     err_msg = save_file_return["message"]
                 if err_msg:
-                    add_notify(f"❌《{task['taskname']}》转存失败：{err_msg}\n")
+                        print(f"❌《{task['taskname']}》转存失败：{err_msg}")
         # 建立目录树
         for index, item in enumerate(need_save_list):
             icon = self._get_file_icon(item)
@@ -1049,7 +1035,7 @@ def verify_account(account):
     else:
         account_info = account.init()
         if not account_info:
-            add_notify(f"👤 第{account.index}个账号登录失败，cookie无效❌")
+            print(f"👤 第{account.index}个账号登录失败，cookie无效❌")
             return False
         else:
             print(f"👤 账号昵称: {account_info['nickname']}✅")
@@ -1093,7 +1079,7 @@ def do_sign(account):
                     print(message)
                 else:
                     message = message.replace("今日", f"[{account.nickname}]今日")
-                    add_notify(message)
+                    print(f"[通知已屏蔽] {message}")
             else:
                 print(f"📅 签到异常: {sign_return}")
     print()
@@ -1181,14 +1167,15 @@ def main():
     print()
     # 读取启动参数
     config_path = sys.argv[1] if len(sys.argv) > 1 else "quark_config.json"
-    # 推送测试
+    # 推送测试 - 已屏蔽
     if os.environ.get("QUARK_TEST", "").lower() == "true":
         print(f"===============通知测试===============")
-        CONFIG_DATA["push_config"] = json.loads(os.environ.get("PUSH_CONFIG"))
-        send_ql_notify(
-            "【夸克自动转存】",
-            f"通知测试\n\n{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
-        )
+        print(f"[通知已屏蔽] 通知测试时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        # CONFIG_DATA["push_config"] = json.loads(os.environ.get("PUSH_CONFIG"))
+        # send_ql_notify(
+        #     "【夸克自动转存】",
+        #     f"通知测试\n\n{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+        # )
         print()
         if cookies := json.loads(os.environ.get("COOKIE", "[]")):
             print(f"===============转存测试===============")
@@ -1246,12 +1233,6 @@ def main():
             do_save(accounts[0], tasklist_from_env)
         else:
             do_save(accounts[0], CONFIG_DATA.get("tasklist", []))
-        print()
-    # 通知
-    if NOTIFYS:
-        notify_body = "\n".join(NOTIFYS)
-        print(f"===============推送通知===============")
-        send_ql_notify("【夸克自动转存】", notify_body)
         print()
     if cookie_form_file:
         # 更新配置

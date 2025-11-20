@@ -4,7 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>夸克自动转存</title>
+  <title>123自动转存</title>
+  <link rel="icon" type="image/x-icon" href="./static/favicon2.ico">
+  <link rel="shortcut icon" type="image/x-icon" href="./static/favicon2.ico">
+  <link rel="icon" type="image/vnd.microsoft.icon" href="/favicon.ico">
   <!-- CSS -->
   <link rel="stylesheet" href="./static/css/bootstrap.min.css">
   <link rel="stylesheet" href="./static/css/bootstrap-icons.min.css">
@@ -22,7 +25,7 @@
   <div id="app">
 
     <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
-      <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#"><i class="bi bi-clouds"></i> 夸克自动转存</a>
+      <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="#">123自动转存</a>
       <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -57,11 +60,7 @@
                 <img src="./static/img/qrcode_tutorial.png">
               </span>
             </p>
-            <p><a target="_blank" href="https://github.com/Cp0204/quark-auto-save/wiki"><i class="bi bi-wechat mr-1"></i>使用交流</a></p>
-            <p><a href="./static/js/qas.addtask.user.js"><i class="bi bi-cloud-plus-fill mr-1"></i>推送任务油猴脚本</a></p>
-            <p><a target="_blank" href="https://github.com/Cp0204/quark-auto-save"><i class="bi bi-github mr-1"></i>quark-auto-save</a></p>
-            <p><span v-html="versionTips"></span></p>
-          </div>
+            </div>
         </div>
       </nav>
 
@@ -77,7 +76,7 @@
                 <button type="button" class="btn btn-outline-primary" @click="addCookie()">+</button>
               </div>
             </div>
-            <p>1. 所有账号执行签到，纯<a class="" href="https://github.com/Cp0204/quark-auto-save/wiki/使用技巧集锦#每日签到领空间">签到</a>只需移动端参数即可！</p>
+            <p>1. 所有账号执行签到，纯签到只需移动端参数即可！</p>
             <p>2. 仅第一个账号执行转存，请自行确认顺序。<b>最好是手机验证码<a target="_blank" href="https://pan.quark.cn/">登录</a>，CK比较完整！</b>如需签到参数附在CK后面。</p>
             <div v-for="(value, index) in formData.cookie" :key="index" class="input-group mb-2">
               <input type="text" v-model="formData.cookie[index]" class="form-control" placeholder="打开 pan.quark.com 按 F12 抓取">
@@ -101,38 +100,11 @@
               <input type="text" v-model="formData.crontab" class="form-control" placeholder="必填">
             </div>
 
-            <div class="row title" title="通知推送，支持多个渠道，见Wiki">
-              <div class="col-8">
-                <h2 style="display: inline-block;"><i class="bi bi-bell"></i> 通知</h2>
-                <span class="badge badge-pill badge-light">
-                  <a href="https://github.com/Cp0204/quark-auto-save/wiki/通知推送服务配置" target="_blank">?</a>
-                </span>
-              </div>
-              <div class="col-4 text-right">
-                <button type="button" class="btn btn-success" title="通知推送测试" @click="testPush()"><i class="bi bi-lightning"></i></button>
-                <button type="button" class="btn btn-outline-primary" @click="addPush()">+</button>
-              </div>
-            </div>
-            <div v-for="(value, key) in formData.push_config" :key="key" class="input-group mb-2">
-              <div class="input-group-prepend">
-                <span class="input-group-text" v-html="key"></span>
-              </div>
-              <div class="input-group-prepend" v-if="(key == 'DEER_KEY' || key == 'PUSH_KEY')">
-                <a type="button" class="btn btn-warning" target="_blank" href="https://sct.ftqq.com/r/13249" title="Server酱推荐计划"><i class="bi bi-award"></i></a>
-              </div>
-              <input type="text" v-model="formData.push_config[key]" class="form-control">
-              <div class="input-group-append">
-                <button type="button" class="btn btn-outline-danger" @click="removePush(key)">-</button>
-              </div>
-            </div>
-
+  
             <div class="row title" v-if="Object.keys(getAvailablePlugins(formData.plugins)).length" title="各插件的配置选项，具体键值由插件定义，见Wiki">
               <div class="col">
                 <h2 style="display: inline-block;"><i class="bi bi-plug"></i> 插件</h2>
-                <span class="badge badge-pill badge-light">
-                  <a href="https://github.com/Cp0204/quark-auto-save/wiki/插件配置" target="_blank">?</a>
-                </span>
-              </div>
+                </div>
             </div>
             <div v-for="(plugin, pluginName) in getAvailablePlugins(formData.plugins)" :key="pluginName">
               <div class="form-group row mb-0" style="display:flex; align-items:center;">
@@ -155,10 +127,7 @@
             <div class="row title" title="预定义的正则匹配规则，在任务列表中可直接点击使用">
               <div class="col-10">
                 <h2 style="display: inline-block;"><i class="bi bi-magic"></i> 魔法匹配</h2>
-                <span class="badge badge-pill badge-light">
-                  <a href="https://github.com/Cp0204/quark-auto-save/wiki/正则处理教程#21-魔法匹配" target="_blank">?</a>
-                </span>
-              </div>
+                </div>
               <div class="col-2 text-right">
                 <button type="button" class="btn btn-outline-primary" @click="addMagicRegex()">+</button>
               </div>
@@ -184,10 +153,7 @@
             <div class="row title" title="API接口，用以第三方添加任务等操作，见Wiki">
               <div class="col-10">
                 <h2 style="display: inline-block;"><i class="bi bi-link-45deg"></i> API</h2>
-                <span class="badge badge-pill badge-light">
-                  <a href="https://github.com/Cp0204/quark-auto-save/wiki/API接口" target="_blank">?</a>
-                </span>
-              </div>
+                  </div>
             </div>
             <div class="input-group">
               <div class="input-group-prepend">
@@ -220,9 +186,6 @@
               <div data-toggle="collapse" data-target="#collapse_cloudsaver" aria-expanded="true" aria-controls="collapse_cloudsaver">
                 <div class="btn btn-block text-left">
                   <i class="bi bi-caret-right-fill"></i> CloudSaver
-                  <span class="badge badge-pill badge-light">
-                    <a href="https://github.com/Cp0204/quark-auto-save/wiki/CloudSaver搜索源" target="_blank">?</a>
-                  </span>
                 </div>
               </div>
             </div>
@@ -600,13 +563,11 @@
       el: '#app',
       data: {
         version: "[[ version ]]",
-        versionTips: "",
-        plugin_flags: "[[ plugin_flags ]]",
+              plugin_flags: "[[ plugin_flags ]]",
         weekdays: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
         formData: {
           cookie: [],
-          push_config: {},
-          media_servers: {},
+            media_servers: {},
           tasklist: [],
           magic_regex: {},
           source: {
@@ -690,8 +651,7 @@
       },
       mounted() {
         this.fetchData();
-        this.checkNewVersion();
-        $('[data-toggle="tooltip"]').tooltip();
+              $('[data-toggle="tooltip"]').tooltip();
         document.addEventListener('keydown', this.handleKeyDown);
         document.addEventListener('click', (e) => {
           if (!e.target.closest('.input-group')) {
@@ -710,21 +670,7 @@
             $('#sidebarMenu').collapse('toggle')
           }
         },
-        checkNewVersion() {
-          this.versionTips = this.version;
-          axios.get('https://api.github.com/repos/Cp0204/quark-auto-save/tags')
-            .then(response => {
-              latestVersion = response.data[0].name;
-              console.log(`检查版本：当前 ${this.version} 最新 ${latestVersion}`);
-              if (latestVersion != this.version) {
-                this.versionTips += ` <sup><span class="position-absolute badge badge-pill badge-danger">${latestVersion}</span></sup>`;
-              }
-            })
-            .catch(error => {
-              console.error('Error:', error);
-            });
-        },
-        fetchData() {
+            fetchData() {
           axios.get('/data')
             .then(response => {
               config_data = response.data.data
@@ -814,19 +760,7 @@
           if (this.formData.cookie[index] == "" || confirm("确认删除吗？"))
             this.formData.cookie.splice(index, 1);
         },
-        testPush() {
-          this.runScriptNow(1, true);
-        },
-        addPush() {
-          key = prompt("增加的键名", "");
-          if (key != "" && key != null)
-            this.$set(this.formData.push_config, key, "");
-        },
-        removePush(key) {
-          if (confirm("确认删除吗？"))
-            this.$delete(this.formData.push_config, key);
-        },
-        addTask() {
+          addTask() {
           newTask = { ...this.newTask }
           newTask.taskname = this.taskNameFilter;
           if (this.formData.tasklist.length > 0) {
@@ -922,8 +856,7 @@
             body = {
               "quark_test": true,
               "cookie": this.formData.cookie,
-              "push_config": this.formData.push_config
-            };
+              };
           } else if (task_index != null) {
             task = { ...this.formData.tasklist[task_index] };
             delete task.runweek;
