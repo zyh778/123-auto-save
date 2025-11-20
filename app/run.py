@@ -464,6 +464,44 @@ def delete_file():
     return jsonify(response)
 
 
+# 测试Cookie接口
+@app.route("/api/test_cookie", methods=["POST"])
+def test_cookie():
+    if not is_login():
+        return jsonify({"success": False, "code": 1, "message": "未登录"}), 401
+
+    cookie = request.json.get("cookie", "")
+    if not cookie:
+        return jsonify({"success": False, "code": 2, "message": "缺少必要字段: cookie"}), 400
+
+    try:
+        account = Quark(cookie)
+        account_info = account.init()
+        if account_info:
+            return jsonify({
+                "success": True,
+                "code": 0,
+                "message": "Cookie有效",
+                "data": {
+                    "nickname": account_info.get("nickname", "未知用户"),
+                    "user_id": account_info.get("user_id", ""),
+                    "is_active": True
+                }
+            })
+        else:
+            return jsonify({
+                "success": False,
+                "code": 3,
+                "message": "Cookie无效或已过期"
+            })
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "code": 4,
+            "message": f"测试失败: {str(e)}"
+        })
+
+
 # 添加任务接口
 @app.route("/api/add_task", methods=["POST"])
 def add_task():

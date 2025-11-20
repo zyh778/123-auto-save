@@ -1059,7 +1059,6 @@ def do_sign(account):
 
 def do_save(account, tasklist=[]):
     # 插件功能已屏蔽
-    print(f"🧩 插件功能已屏蔽")
     # plugins, CONFIG_DATA["plugins"], task_plugins_config = Config.load_plugins(
     #     CONFIG_DATA.get("plugins", {})
     # )
@@ -1120,18 +1119,7 @@ def do_save(account, tasklist=[]):
                         result[key] = value
                 return result
 
-            # 插件功能已屏蔽，不再合并插件配置
-            # task["addition"] = merge_dicts(
-            #     task.get("addition", {}), task_plugins_config
-            # )
-            # 插件功能已屏蔽，不再调用插件
-            # if is_new_tree:
-            #     print(f"🧩 调用插件")
-            #     for plugin_name, plugin in plugins.items():
-            #         if plugin.is_active:
-            #             task = (
-            #                 plugin.run(task, account=account, tree=is_new_tree) or task
-            #             )
+
     print()
 
 
@@ -1192,15 +1180,13 @@ def main():
         print("❌ cookie 未配置")
         return
     accounts = [Quark(cookie, index) for index, cookie in enumerate(cookies)]
-    # 签到功能已屏蔽
-    print(f"===============签到任务已屏蔽===============")
-    # if tasklist_from_env:
-    #     verify_account(accounts[0])
-    # else:
-    #     for account in accounts:
-    #         verify_account(account)
-    #         do_sign(account)
-    print()
+    # 签到功能已屏蔽，但需要验证账号以激活转存功能
+    if tasklist_from_env:
+        verify_account(accounts[0])
+    else:
+        for account in accounts:
+            verify_account(account)
+            # do_sign(account)  # 签到功能已屏蔽
     # 转存
     if accounts[0].is_active and cookie_form_file:
         print(f"===============转存任务===============")

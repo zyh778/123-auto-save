@@ -69,8 +69,11 @@
             </div>
             <p>仅第一个账号执行转存，请自行确认顺序</p>
             <div v-for="(value, index) in formData.cookie" :key="index" class="input-group mb-2">
-              <input type="text" v-model="formData.cookie[index]" class="form-control" placeholder="填写cookie">
+              <input type="text" v-model="formData.cookie[index]" class="form-control" :placeholder="getCookiePlaceholder(index)">
               <div class="input-group-append">
+                <button type="button" class="btn btn-outline-info" @click="testCookie(index)" title="测试Cookie连接">
+                  <i class="bi bi-wifi"></i>
+                </button>
                 <button type="button" class="btn btn-outline-danger" @click="removeCookie(index)">-</button>
               </div>
             </div>
@@ -721,6 +724,47 @@
         removeCookie(index) {
           if (this.formData.cookie[index] == "" || confirm("确认删除吗？"))
             this.formData.cookie.splice(index, 1);
+        },
+        async testCookie(index) {
+          const cookie = this.formData.cookie[index];
+          if (!cookie.trim()) {
+            alert('请先填写Cookie');
+            return;
+          }
+
+          // 显示测试中状态
+          const button = event.target.closest('button');
+          const originalButton = button.innerHTML;
+          button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+          button.disabled = true;
+
+          try {
+            const response = await axios.post('/api/test_cookie', {
+              cookie: cookie
+            });
+
+            if (response.data.success) {
+              alert(`✅ ${response.data.message}\n用户: ${response.data.data.nickname}`);
+              console.log('Cookie测试成功:', response.data);
+            } else {
+              alert(`❌ ${response.data.message}`);
+              console.error('Cookie测试失败:', response.data);
+            }
+          } catch (error) {
+            console.error('测试Cookie失败:', error);
+            alert('❌ 网络错误，请检查连接');
+          } finally {
+            // 恢复按钮状态
+            button.innerHTML = originalButton;
+            button.disabled = false;
+          }
+        },
+        getCookiePlaceholder(index) {
+          if (index === 0) {
+            return "填写第一个账号Cookie（主账号，用于转存）";
+          } else {
+            return `填写第${index + 1}个账号Cookie`;
+          }
         },
           addTask() {
           newTask = { ...this.newTask }

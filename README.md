@@ -1,62 +1,57 @@
-# <div align="center"><img src="img/icon.png" width="120" alt="夸克自动转存助手"></div>
-
-## <div align="center">夸克自动转存助手</div>
+# 123自动转存
 
 <div align="center">
 
-一个功能强大的夸克网盘自动转存工具，支持定时追更、智能重命名、插件扩展等功能。
+![项目图标](img/icon.png)
 
-[![Python](https://img.shields.io/badge/Python-3.6+-blue.svg)](https://www.python.org/)
-[![Flask](https://img.shields.io/badge/Flask-2.0+-green.svg)](https://flask.palletsprojects.com/)
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/Cp0204/quark_auto_save.svg)](https://github.com/Cp0204/quark_auto_save)
+**基于Flask + Vue.js的夸克网盘自动转存工具**
+
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
+[![Flask](https://img.shields.io/badge/Flask-2.0+-green.svg)](https://flask.palletsprojects.com)
+[![Vue.js](https://img.shields.io/badge/Vue.js-2.x-brightgreen.svg)](https://vuejs.org)
+[![License](https://img.shields.io/badge/License-AGPL-yellow.svg)](LICENSE)
+
 
 </div>
 
+## 📖 项目简介
+
+**123自动转存** 是一个功能强大的夸克网盘自动转存工具，提供现代化的Web管理界面和智能的文件管理功能。支持正则表达式匹配、自动重命名、定时任务调度等高级特性，让你的网盘管理更加智能高效。
+
 ## ✨ 主要特性
 
-### 🔁 自动转存与追更
-- **智能监控**：自动监控夸克分享链接，及时转存新内容
-- **增量更新**：仅转存新增文件，避免重复操作
-- **批量管理**：支持多任务并行处理
+### 🚀 核心功能
+- **自动转存**: 智能识别夸克网盘分享链接并自动转存
+- **正则匹配**: 强大的文件匹配和重命名规则引擎
+- **任务管理**: 完整的任务CRUD操作和状态监控
+- **定时调度**: 基于Cron表达式的灵活任务调度
+- **实时日志**: Server-Sent Events实时任务执行日志
 
-### 🎯 智能过滤与重命名
-- **正则匹配**：强大的正则表达式匹配功能
-- **魔法重命名**：支持多种变量替换（集数、季数、日期等）
-- **智能排序**：自动文件排序，确保命名一致性
-- **扩展名处理**：可配置忽略扩展名进行重复检测
+### 🌐 Web界面
+- **现代化UI**: 基于Vue.js + Bootstrap 5的响应式设计
+- **在线配置**: JSON配置文件在线编辑器
+- **Cookie验证**: 实时测试Cookie有效性
+- **任务建议**: 智能任务推荐和快速添加
+- **文件管理**: 直观的文件浏览和管理界面
 
-### 🌐 Web 管理界面
-- **可视化配置**：直观的 Web 界面管理任务
-- **实时监控**：查看转存进度和执行日志
-- **定时任务**：基于 APScheduler 的定时任务调度
-- **远程管理**：支持远程访问和控制
-
-### 🔌 插件系统
-- **扩展架构**：支持自定义插件扩展功能
-- **丰富插件**：内置 Emby、Plex、AList 等多种插件
-- **热插拔**：支持插件动态加载和配置
-- **优先级控制**：可配置插件执行优先级
-
-### 📱 多平台支持
-- **青龙面板**：完美适配青龙定时任务
-- **Docker**：提供 Docker 镜像部署
-- **本地运行**：支持 Windows、Linux、macOS
-- **云服务器**：支持各种云服务器环境
+### 🔧 高级特性
+- **魔法匹配**: 预定义的常用匹配模式
+- **多账号支持**: 支持多个夸克账号管理
+- **插件系统**: 可扩展的插件架构（当前版本已屏蔽）
+- **媒体集成**: 支持媒体服务器识别和处理
 
 ## 🚀 快速开始
 
 ### 环境要求
-
-- Python 3.6+
-- pip 包管理器
+- Python 3.8+
+- 现代浏览器（Chrome、Firefox、Safari、Edge）
 
 ### 安装步骤
 
 1. **克隆项目**
 ```bash
-git clone https://github.com/Cp0204/quark_auto_save.git
-cd quark_auto_save
+git clone https://github.com/your-repo/123-auto-save.git
+cd 123-auto-save
 ```
 
 2. **安装依赖**
@@ -64,220 +59,214 @@ cd quark_auto_save
 pip install -r requirements.txt
 ```
 
-3. **配置文件**
+3. **配置Cookie**
+- 打开浏览器访问 `pan.quark.cn`
+- 按F12打开开发者工具
+- 复制完整的Cookie字符串
+- 编辑 `config/quark_config.json` 文件，填入你的Cookie
+
+4. **启动服务**
 ```bash
-# 首次运行会自动下载配置模板
-python quark_auto_save.py
+python app/run.py
 ```
 
-4. **编辑配置**
-编辑 `quark_config.json` 文件，配置您的夸克 Cookie 和转存任务：
+5. **访问管理界面**
+打开浏览器访问：`http://localhost:5005`
 
+## 📋 使用指南
+
+### Cookie配置格式
 ```json
 {
-  "cookie": "您的夸克Cookie",
-  "push_config": {
-    "CONSOLE": true
+  "cookie": [
+    "你的完整Cookie字符串"
+  ]
+}
+```
+
+### 任务配置示例
+```json
+{
+  "taskname": "我的转存任务",
+  "shareurl": "https://pan.quark.cn/s/xxxxx",
+  "savepath": "/我的文件/转存目录",
+  "pattern": "$TV_REGEX",
+  "replace": "",
+  "enddate": "2099-12-31"
+}
+```
+
+### 定时规则
+```bash
+# 每天8点、18点、20点执行
+"crontab": "0 8,18,20 * * *"
+
+# 每周一至周五的9点执行
+"crontab": "0 9 * * 1-5"
+
+# 每2小时执行一次
+"crontab": "0 */2 * * *"
+```
+
+## 🛠️ 功能模块
+
+### Web管理界面
+- **登录认证**: 安全的用户登录和会话管理
+- **配置管理**: 在线JSON配置编辑器
+- **任务管理**: 任务列表的增删改查
+- **实时监控**: 任务执行状态的实时更新
+- **手动执行**: 即时触发指定任务执行
+
+### 核心转存引擎
+- **Quark API**: 完整的夸克网盘API封装
+- **智能匹配**: 支持正则表达式的文件匹配
+- **自动重命名**: 基于规则的智能文件重命名
+- **批量处理**: 高效的批量文件转存
+- **错误处理**: 完善的异常处理和重试机制
+
+### Cookie验证系统
+- **实时测试**: 点击按钮即时验证Cookie有效性
+- **用户信息**: 显示Cookie对应的用户昵称
+- **状态反馈**: 直观的测试结果提示
+- **错误诊断**: 帮助快速定位Cookie问题
+
+## 📁 项目结构
+
+```
+123-auto-save/
+├── app/                    # Web服务模块
+│   ├── run.py            # Flask应用入口
+│   ├── templates/        # HTML模板
+│   │   ├── index.html   # 主页面
+│   │   └── login.html   # 登录页面
+│   └── static/           # 静态资源
+│       ├── css/         # 样式文件
+│       ├── js/          # JavaScript文件
+│       └── img/         # 图片资源
+├── config/               # 配置文件目录
+│   └── quark_config.json # 主配置文件
+├── img/                  # 项目图片
+│   ├── icon.png         # 项目图标
+│   └── screenshot.png   # 截图
+├── quark_auto_save.py   # 核心转存逻辑
+├── quark_config.json     # 配置模板
+├── requirements.txt       # Python依赖
+└── README.md            # 项目说明
+```
+
+## 🎯 使用场景
+
+### 📚 资料收集
+- 自动收集学习资料和文档
+- 批量下载课程视频和电子书
+- 智能分类和整理学习资源
+
+### 🎬 媒体管理
+- 影视剧集的自动分类存储
+- 按规则重命名媒体文件
+- 定时获取新发布的剧集
+
+### 💾 数据备份
+- 重要资料的自动备份
+- 多渠道数据同步
+- 定时备份任务调度
+
+## 🔧 配置说明
+
+### 基础配置
+```json
+{
+  "cookie": [
+    "b-user-id=xxx; _UP_A4A_11_=xxx; __uid=xxx;"
+  ],
+  "crontab": "0 8,18,20 * * *",
+  "webui": {
+    "username": "admin",
+    "password": "admin123"
+  }
+}
+```
+
+### 高级配置
+```json
+{
+  "magic_regex": {
+    "$TV_REGEX": {
+      "pattern": ".*?([Ss]\\d{1,2})?(?:[第EePpXx\\.\\-\\_\\( ]{1,2}|^)(\\d{1,3})(?!\\d).*?\\.(mp4|mkv)",
+      "replace": "\\1E\\2.\\3"
+    }
   },
   "tasklist": [
     {
-      "taskname": "示例任务",
-      "shareurl": "https://pan.quark.cn/s/xxxxxxxx",
-      "savepath": "/自动转存",
-      "pattern": ".*\\.(mp4|mkv|avi)",
-      "replace": "{TASKNAME} - S{SXX}E{E}.{EXT}"
+      "taskname": "自动转存",
+      "shareurl": "分享链接",
+      "savepath": "/目标目录",
+      "pattern": "",
+      "replace": "",
+      "enddate": "2099-12-31"
     }
   ]
 }
 ```
 
-### 青龙面板部署
+### 环境变量
+| 变量名 | 说明 | 默认值 |
+|--------|------|--------|
+| `HOST` | 服务监听地址 | `0.0.0.0` |
+| `PORT` | 服务端口 | `5005` |
+| `DEBUG` | 调试模式开关 | `false` |
+| `CONFIG_PATH` | 配置文件路径 | `./config/quark_config.json` |
 
-1. **添加仓库**
-```bash
-ql repo https://github.com/Cp0204/quark_auto_save.git "quark_auto_save"
-```
-
-2. **设置定时任务**
-```
-0 8,18,20 * * * quark_auto_save.py
-```
-
-3. **配置环境变量**
-- `QUARK_COOKIE`: 夸克 Cookie（仅签到）
-- `QUARK_TEST`: 设置为 "true" 进行通知测试
-
-### Docker 部署
-
-```bash
-docker run -d \
-  --name quark-auto-save \
-  -v $(pwd)/config:/app/config \
-  -p 5000:5000 \
-  cp0204/quark-auto-save:latest
-```
-
-## 📖 详细配置
-
-### Cookie 获取
-
-1. 登录 [夸克网盘](https://pan.quark.cn/)
-2. 打开浏览器开发者工具 (F12)
-3. 刷新页面，在 Network 标签找到请求
-4. 复制请求头中的 `Cookie` 字段
-
-### 任务配置参数
-
-| 参数 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| `taskname` | string | ✅ | 任务名称 |
-| `shareurl` | string | ✅ | 夸克分享链接 |
-| `savepath` | string | ✅ | 保存路径 |
-| `pattern` | string | ❌ | 正则匹配模式 |
-| `replace` | string | ❌ | 重命名模板 |
-| `startfid` | string | ❌ | 起始文件ID |
-| `enddate` | string | ❌ | 任务结束日期 |
-| `runweek` | array | ❌ | 运行星期 |
-| `ignore_extension` | boolean | ❌ | 忽略扩展名检测 |
-
-### 魔法变量说明
-
-| 变量 | 说明 | 示例 |
-|------|------|------|
-| `{TASKNAME}` | 任务名称 | `我的剧集` |
-| `{S}` | 季数（单数字） | `1` |
-| `{SXX}` | 季数（双数字） | `S01` |
-| `{E}` | 集数 | `05` |
-| `{DATE}` | 日期 | `2024-01-01` |
-| `{YEAR}` | 年份 | `2024` |
-| `{EXT}` | 文件扩展名 | `mp4` |
-| `{I+}` | 序号占位符 | `001, 002, 003` |
-
-## 🔌 插件开发
-
-### 插件接口
-
-```python
-class YourPlugin:
-    def __init__(self, **config):
-        self.default_config = {
-            "enabled": True
-        }
-        self.config = {**self.default_config, **config}
-        self.is_active = self.config.get("enabled", False)
-
-    def run(self, task, account=None, tree=None):
-        # 插件逻辑处理
-        return task
-```
-
-### 内置插件
-
-- **Emby**: 自动刷新 Emby 媒体库
-- **Plex**: 自动更新 Plex 服务器
-- **AList**: 同步文件到 AList
-- **WebHook**: 发送 WebHook 通知
-
-## 📊 Web 管理界面
-
-访问 `http://localhost:5000` 进入 Web 管理界面：
-
-- **任务管理**: 添加、编辑、删除转存任务
-- **执行日志**: 查看详细的执行日志
-- **系统状态**: 监控系统运行状态
-- **配置管理**: 在线编辑配置文件
-
-## 🔧 高级功能
-
-### 定时任务配置
-
-使用 APScheduler 支持多种定时方式：
-
-```python
-# 每天定时执行
-scheduler.add_job(task_function, 'cron', hour=8, minute=0)
-
-# 间隔执行
-scheduler.add_job(task_function, 'interval', hours=2)
-
-# 一次性执行
-scheduler.add_job(task_function, 'date', run_date='2024-01-01 10:00:00')
-```
-
-### 通知配置
-
-支持多种通知方式：
-
-```json
-{
-  "push_config": {
-    "CONSOLE": true,
-    "SERVERCHAN": "您的 ServerChan Key",
-    "BARK": "您的 Bark Token",
-    "TG_BOT_TOKEN": "您的 Telegram Bot Token",
-    "TG_USER_ID": "您的 Telegram User ID"
-  }
-}
-```
-
-## 🛠️ 故障排除
+## 🐛 故障排除
 
 ### 常见问题
 
-1. **Cookie 失效**
-   - 重新获取夸克 Cookie
-   - 检查 Cookie 格式是否正确
+**Q: Cookie如何获取？**
+A:
+1. 打开浏览器访问 `pan.quark.cn`
+2. 登录你的夸克账号
+3. 按F12打开开发者工具
+4. 切换到Network标签页
+5. 刷新页面，找到任意请求
+6. 复制Request Headers中的Cookie字符串
 
-2. **转存失败**
-   - 检查分享链接是否有效
-   - 确认保存路径是否有权限
+**Q: 任务执行失败怎么办？**
+A:
+1. 检查Cookie是否有效（使用测试按钮）
+2. 确认分享链接是否有效且未过期
+3. 检查目标路径是否存在权限
+4. 查看实时日志了解具体错误信息
 
-3. **任务不执行**
-   - 检查运行周期配置
-   - 确认正则表达式是否正确
+**Q: 定时任务不执行？**
+A:
+1. 检查Cron表达式格式是否正确
+2. 确认服务程序持续运行
+3. 查看系统时间和任务时间配置
+4. 检查任务是否已被禁用
 
-### 日志分析
-
-程序运行日志包含详细信息：
-
-```bash
-# 查看完整日志
-python quark_auto_save.py
-
-# 查看特定任务
-grep "任务名称" logs/quark_auto_save.log
-```
+**Q: Web界面无法访问？**
+A:
+1. 检查服务是否正常启动
+2. 确认端口是否被占用
+3. 检查防火墙设置
+4. 尝试使用 `http://localhost:5005` 访问
 
 ## 🤝 贡献指南
 
-欢迎提交 Issue 和 Pull Request！
+欢迎提交Issue和Pull Request！
 
-1. Fork 本项目
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 开启 Pull Request
+### 开发流程
+1. Fork 项目
+2. 创建功能分支
+3. 提交更改
+4. 创建Pull Request
 
-## 📄 许可证
+### 代码规范
+- 遵循PEP 8代码风格
+- 添加适当的注释和文档
+- 确保代码通过测试
+- 保持提交信息清晰
 
-本项目基于 MIT 许可证开源 - 查看 [LICENSE](LICENSE) 文件了解详情。
+## 📄 开源协议
 
-## 🙏 致谢
-
-- [Quark](https://pan.quark.cn/) - 夸克网盘服务
-- [Flask](https://flask.palletsprojects.com/) - Web 框架
-- [APScheduler](https://apscheduler.readthedocs.io/) - 任务调度
-- [treelib](https://treelib.readthedocs.io/) - 树形数据结构
-
-## 📞 联系方式
-
-- 项目主页: [GitHub](https://github.com/Cp0204/quark_auto_save)
-- 问题反馈: [Issues](https://github.com/Cp0204/quark_auto_save/issues)
-- 讨论交流: [Discussions](https://github.com/Cp0204/quark_auto_save/discussions)
-
----
-
-<div align="center">
-  <p>如果这个项目对您有帮助，请给个 ⭐️ 支持一下！</p>
-  <p>Made with ❤️ by Cp0204</p>
-</div>
+本项目采用 [AGPL License](LICENSE) 开源协议。
